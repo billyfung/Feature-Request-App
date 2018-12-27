@@ -4,11 +4,11 @@ import os
 from flask import Flask, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import StringField
+from wtforms import StringField, IntegerField, DateField
 from wtforms.validators import DataRequired
 
 app = Flask(__name__)
-app.secret_key = os.environ['APP_SECRET_KEY']
+app.secret_key = 'APP_SECRET_KEY'
 db = SQLAlchemy()
 db.init_app(app)
 
@@ -53,5 +53,5 @@ def success():
     return "Request noted!"
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
