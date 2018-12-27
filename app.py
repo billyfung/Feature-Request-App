@@ -9,6 +9,7 @@ from wtforms.validators import DataRequired
 
 app = Flask(__name__)
 app.secret_key = 'APP_SECRET_KEY'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 db = SQLAlchemy()
 db.init_app(app)
 
@@ -48,6 +49,10 @@ def feature_request():
         return redirect(url_for('success'))
     return render_template('request.html', form=form)
 
+@app.route("/list")
+def get_list():
+    print(FeatureRequest.query.all())
+    
 @app.route("/success")
 def success():
     return "Request noted!"
