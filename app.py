@@ -13,7 +13,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 db = SQLAlchemy()
 db.init_app(app)
 
-
 class FeatureRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), nullable=False)
@@ -37,12 +36,16 @@ class RequestForm(FlaskForm):
 
 @app.route("/", methods=('GET', 'POST'))
 def feature_request():
+    db.create_all()
     form = RequestForm()
     if form.validate_on_submit():
         feat_request = FeatureRequest(
-            name=form.name.data,
-            email=form.email.data,
-            date_signed_up=datetime.datetime.now()
+            title=form.title.data,
+            description=form.description.data,
+            client=form.client.data,
+            client_priority=form.client_priority.data,
+            target_date=form.target_date.data,
+            product_area=form.product_area.data
         )
         db.session.add(feat_request)
         db.session.commit()
