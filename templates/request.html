@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <body>
+        <h1> Hello, please fill out your request </h1>
+        <form method="POST" action="/">
+            {{ form.csrf_token }}
+            {{ form.title.label }} {{ form.title(size=20) }}
+            {{ form.description.label }} {{ form.description(size=20) }}
+            {{ form.client.label }} {{ form.client(size=20) }}
+            {{ form.client_priority.label }} {{ form.client_priority(size=20) }}
+            {{ form.target_date.label }} {{ form.target_date(size=20) }}
+            {{ form.product_area.label }} {{ form.product_area(size=20) }}
+            <input type="submit" value="Go">
+        </form>
+    </body>
+</html>
