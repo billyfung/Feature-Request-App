@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <table>
+    {% for item in items %}
+    <TR>
+       <TD class="c1">{{item.title}}</TD>
+       <TD class="c2">{{item.client}}</TD>
+       <TD class="c3">{{item.description}}</TD>
+       <TD class="c4"><SPAN>{{item.client_priority}}</SPAN></TD>
+       <TD class="c5"><SPAN>{{item.target_date}}</SPAN></TD>
+    </TR>
+    {% endfor %}
+    </table>
+</body>
+</html>
