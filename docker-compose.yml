@@ -1,13 +1,16 @@
-version: '3.5'
+version: '3.7'
 
 services:
   app:
     container_name: flaskapp
+    restart: always
     build:
       context: .
-      # dockerfile: app/Dockerfile
+      dockerfile: Dockerfile-dev
     env_file:
       - env_file
+    ports:
+    - "5000:5000"
     volumes:
       - .:/app
     depends_on:
@@ -15,12 +18,11 @@ services:
     networks:
       - db_nw
       - web_nw
-      
   db:
     container_name: postgres
-    image: postgres:11
+    image: postgres:10
     ports:
-      - 5432:5432  
+      - 5432:5432
     env_file:
       - env_file
     volumes:
@@ -28,6 +30,7 @@ services:
     networks:
       - db_nw
   nginx:
+    container_name: nginx
     image: "nginx:1.13.5"
     ports:
       - "8080:80"
@@ -35,8 +38,46 @@ services:
       - ./conf.d:/etc/nginx/conf.d
     networks:
       - web_nw
-    depends_on: 
+    depends_on:
       - app
+  redis:
+    container_name: redis
+    restart: always
+    image: redis
+    environment:
+      - TZ=Pacific/Auckland
+      - HOST=redis
+    ports:
+        - '6379:6379'
+    networks:
+      - web_nw
+  worker:
+    container_name: celery-worker
+    build:
+      context: celery-queue
+      dockerfile: Dockerfile
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - C_FORCE_ROOT=true
+      - HOST=celery
+    depends_on:
+      - redis
+    networks:
+      - web_nw
+  monitor:
+    container_name: celery-monitor
+    build:
+      context: celery-queue
+      dockerfile: Dockerfile
+    ports:
+     - "5555:5555"
+    entrypoint: flower
+    command:  -A tasks --port=5555 --broker=redis://redis:6379/0
+    depends_on:
+      - redis
+    networks:
+      - web_nw
 networks:
   db_nw:
     driver: bridge
