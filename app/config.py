@@ -10,8 +10,6 @@ class BaseConfig:
     DEBUG = False
     TESTING = False
 
-    ADMINS = ['scott.macdonald@emhtrade.com']
-
     # http://flask.pocoo.org/docs/quickstart/#sessions
     SECRET_KEY = 'secret key'
 
