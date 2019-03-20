@@ -50,12 +50,15 @@ def feature_request():
         db.session.add(feat_request)
         db.session.commit()
         return redirect(url_for('success'))
+    else:
+        return render_template('404.html'), 404
     return render_template('request.html', form=form)
 
 @app.route("/list")
 def get_list():
-    print(FeatureRequest.query.all())
-    
+    all_reqs = FeatureRequest.query.all()
+    return render_template('request_list.html', items=all_reqs)
+
 @app.route("/success")
 def success():
     return "Request noted!"
