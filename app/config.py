@@ -10,7 +10,7 @@ class BaseConfig:
     DEBUG = False
     TESTING = False
 
-    ADMINS = ['scott.macdonald@emhtrade.com']
+    ADMINS = ['billy@billyfung.com']
 
     # http://flask.pocoo.org/docs/quickstart/#sessions
     SECRET_KEY = 'secret key'
@@ -30,7 +30,8 @@ class DefaultConfig(BaseConfig):
 
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = True
-    SQLALCHEMY_DATABASE_URI = 'postgresql://admin@localhost/features'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+        'sqlite:///' + os.path.join(basedir, 'app.db')
     
 
 class TestConfig(BaseConfig):
